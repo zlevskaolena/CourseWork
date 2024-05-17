@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<p>Hello, unauthenticated user!</p>
+<form method="POST" action="">
+  {{ register_form.hidden_tag() }}
+    {{ register_form.username( placeholder = "Username") }}
+    {{ register_form.email( placeholder = "Email") }}
+    {{ register_form.password( placeholder = "Password") }}
+    {{ register_form.confirm_password( placeholder = "Confirm Password") }}
+    {{ register_form.submit() }}
+</form>
+</body>
+</html>
