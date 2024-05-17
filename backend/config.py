@@ -8,7 +8,7 @@ import os
 
 app = Flask(__name__, template_folder='../templates')
 bcrypt = Bcrypt(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///DataBase.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///DataBaseTest.db'
 db = SQLAlchemy(app)
 
 SECRET_KEY = os.urandom(32)
@@ -18,13 +18,19 @@ csrf = CSRFProtect(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 login_manager.login_message_category = 'info'
+
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
+
+
+with app.app_context():
+    db.create_all()
