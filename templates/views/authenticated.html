@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Authenticated</title>
 </head>
 <body>
-<p>Hello, authenticated user!</p>
-<form method="post">
-  <input type="hidden" name="csrf_token" value="{{csrf_token()}}"/>
-  <input type="hidden" name="post_header" value="log out">
-  <input type="submit"  value="Logout">
-</form>
+    <p>Ви увійшли!</p>
+    <form method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="post_header" value="log out">
+        <input type="submit" value="Logout">
+    </form>
 </body>
 </html>
