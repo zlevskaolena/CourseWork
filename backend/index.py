@@ -1,8 +1,10 @@
-from backend.config import User, app, db, bcrypt, mail
-from flask import render_template, redirect, url_for, request, flash
+from backend.config import User, app, db, bcrypt, mail, Card
+from flask import render_template, redirect, url_for, request, flash, session, jsonify
 from flask_login import login_user, current_user, logout_user
 from backend.forms import LoginForm, RegistrationForm, RequestResetForm, ResetPasswordForm
 from flask_mail import Message
+import random
+from sqlalchemy import func
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -65,6 +67,7 @@ def reset_request():
         return redirect(url_for('login'))
     return render_template('reset_request.html', title='Reset Password', form=form, register_form=RegistrationForm(), login_form=LoginForm())
 
+
 @app.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_token(token):
     if current_user.is_authenticated:
@@ -81,3 +84,42 @@ def reset_token(token):
         flash('Your password has been updated! You are now able to log in', 'success')
         return redirect(url_for('login'))
     return render_template('reset_token.html', title='Reset Password', form=form, register_form=RegistrationForm())
+
+
+@app.route('/cards')
+def play_game():
+    if 'random_cards' not in session:
+        session['random_cards'] = get_random_cards()
+    if 'current_index' not in session:
+        session['current_index'] = 0
+
+    current_index = session['current_index']
+    random_cards = session['random_cards']
+
+    if isinstance(random_cards, dict) and random_cards.get('response'):
+        random_cards = random_cards['response']
+
+    if current_index < len(random_cards):
+        current_card = random_cards[current_index]
+        session['current_index'] += 1
+    else:
+        session.pop('random_cards', None)
+        session.pop('current_index', None)
+        return jsonify({'message': 'No more cards'}), 200
+
+    return jsonify(current_card), 200
+
+
+@app.route('/game_over')
+def game_over():
+    score = session.get('score', 0)
+    session.pop('random_cards', None)
+    session.pop('current_card_index', None)
+    session.pop('score', None)
+    return render_template('games/cards_over.html', score=score)
+
+
+def get_random_cards():
+    cards = Card.query.all()
+    random.shuffle(cards)
+    return [card.to_dict() for card in cards]
