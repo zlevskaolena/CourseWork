@@ -1,0 +1,71 @@
+/* Загальний стиль для тіла сторінки */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+/* Стиль для заголовків */
+h1, h2, h3, h4, h5, h6 {
+    margin: 10px 0;
+    padding: 0;
+    color: #333;
+}
+
+/* Стилізація карточок */
+#cards-container {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#cards-container li {
+    display: inline-block;
+    margin: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    width: 200px;
+    text-align: center;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#cards-container li img {
+    max-width: 100%;
+    border-radius: 5px;
+}
+
+#cards-container li p {
+    margin: 10px 0 0;
+    font-size: 16px;
+    color: #555;
+}
+
+/* Стилізація кнопок */
+#true-button,
+#false-button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#true-button:hover,
+#false-button:hover {
+    background-color: #0056b3;
+}
+
+/* Додатковий стиль для кнопок при активному стані */
+#true-button:active,
+#false-button:active {
+    background-color: #003f7f;
+}

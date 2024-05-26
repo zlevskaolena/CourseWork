@@ -12,7 +12,7 @@ from flask_login import LoginManager, UserMixin
 import base64
 from flask_session import Session
 
-app = Flask(__name__, template_folder='../templates')
+app = Flask(__name__, static_folder='../static', template_folder='../templates')
 bcrypt = Bcrypt(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///DataBase1.db'
 db = SQLAlchemy(app)
@@ -23,7 +23,6 @@ MAIL_USE_TLS = True
 MAIL_USERNAME = os.environ.get('EMAIL_USER')
 MAIL_PASSWORD = os.environ.get('EMAIL_PASS')
 mail = Mail(app)
-
 
 SECURITY_PASSWORD_SALT = os.urandom(32)
 app.config['SECURITY_PASSWORD_SALT'] = SECURITY_PASSWORD_SALT
@@ -57,7 +56,6 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
-
     card_results = relationship('CardResult', backref='user', lazy=True)
 
     def get_reset_token(self, expires_sec=1800):
@@ -95,7 +93,7 @@ def image_to_base64(image):
 def card_to_dict(card):
     return {
         'id': card.id,
-        'image': image_to_base64(card.image),
+        'image': 'data:image/jpeg;base64,' + image_to_base64(card.image),
         'word': card.word,
         'correct_answer': card.correct_answer
     }

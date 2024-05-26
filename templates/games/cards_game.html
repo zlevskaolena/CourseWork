@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Play Game</title>
+    <title>Cards Game</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Random Cards</h1>
-    <ul>
-        {% for card in cards %}
-        <li>
-            <img src="{{ card.image }}" alt="Card Image">
-            <p>{{ card.word }}</p>
-        </li>
-        {% endfor %}
-    </ul>
+    <div id="game-container">
+        <img id="card-image" src="" alt="Card Image">
+        <p id="card-word"></p>
+        <button id="true-button">True</button>
+        <button id="false-button">False</button>
+    </div>
+    <script src="{{ url_for('static', filename='cards.js') }}"></script>
 </body>
 </html>
+
