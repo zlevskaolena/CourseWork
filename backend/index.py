@@ -80,6 +80,7 @@ def reset_token(token):
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         user.password = hashed_password
         db.session.commit()
+
         flash('Your password has been updated! You are now able to log in', 'success')
         return redirect(url_for('login'))
     return render_template('reset_token.html', title='Reset Password', form=form, register_form=RegistrationForm())
@@ -108,7 +109,7 @@ def play_game():
         session['current_index'] += 1
         if session['current_index'] >= len(session['random_cards']):
             score = session.get('score', 0)
-            session.pop('score', None)
+            session['final_score'] = score  # Зберігаємо фінальний рахунок у сесії
             print("DEBUG: End of game. Final score:", score)
             if current_user.is_authenticated:
                 result = CardResult(user_id=current_user.id, result="Game Over", score=score)
@@ -133,7 +134,6 @@ def play_game():
         return render_template('games/cards_game.html')
 
 
-
 @app.route('/home/cards/cards_over', methods=['GET', 'POST'])
 def cards_over():
     score = session.pop('final_score', None)
@@ -147,6 +147,7 @@ def cards_over():
     else:
         score = request.args.get('score')
         return render_template('games/cards_over.html', score=score, show_button=show_button)
+
 
 
 def get_random_cards(limit=10):

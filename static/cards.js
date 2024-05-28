@@ -3,20 +3,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const falseButton = document.getElementById('false-button');
     const cardImage = document.getElementById('card-image');
 
-    let gameOver = false; // Додаємо прапорець для перевірки завершення гри
-
     function displayCard(card) {
         if (card.message === 'No more cards') {
             window.location.href = '/home/cards/cards_over';
-            gameOver = true; // Встановлюємо прапорець після завершення гри
         } else {
             cardImage.src = card.image;
         }
     }
 
     function sendUserAnswer(answer) {
-        if (gameOver) return; // Перевіряємо прапорець перед надсиланням відповіді
-
         fetch('/home/cards', {
             method: 'POST',
             headers: {
@@ -33,19 +28,13 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(data => {
             console.log(data);
-            if (data.message !== 'No more cards') {
-                fetchNextCard();
-            } else {
-                gameOver = true;
-                window.location.href = '/home/cards/cards_over';
-            }
+            // Після надсилання відповіді отримуємо нову картку
+            fetchNextCard();
         })
         .catch(error => console.error('Error:', error));
     }
 
     function fetchNextCard() {
-        if (gameOver) return; // Перевіряємо прапорець перед отриманням нової картки
-
         fetch('/home/cards', {
             headers: {
                 'Content-Type': 'application/json',
