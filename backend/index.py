@@ -99,6 +99,10 @@ def play_game():
         print("DEBUG: Received user answer")
 
         current_index = session['current_index']
+        if current_index >= len(session['random_cards']):
+            print("DEBUG: No more cards")
+            return jsonify({'message': 'No more cards'}), 200
+
         current_card = session['random_cards'][current_index]
         correct_answer = current_card['correct_answer']
 
@@ -126,7 +130,6 @@ def play_game():
 
         current_index = session['current_index']
         current_card = session['random_cards'][current_index]
-        session['current_index'] += 1
         print("DEBUG: Next card")
         return jsonify(current_card)
 
@@ -149,11 +152,11 @@ def cards_over():
         return render_template('games/cards_over.html', score=score, show_button=show_button)
 
 
-
-def get_random_cards(limit=10):
+def get_random_cards():
     cards = Card.query.all()
     random.shuffle(cards)
-    return [card.to_dict() for card in cards[:limit]]
+    return [card.to_dict() for card in cards]
+
 
 
 

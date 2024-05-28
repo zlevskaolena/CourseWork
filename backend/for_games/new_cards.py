@@ -12,12 +12,12 @@ def create_card(image_path, correct_answer):
         new_card = Card(image=image_data, correct_answer=correct_answer)
         db.session.add(new_card)
         db.session.commit()
-        print("Card created successfully!")
+        print("+ карточка")
 
 
 if __name__ == "__main__":
-    image_path = 'D:\\2024\\images_for_cards\\no_vestitto.jpg'
-    correct_answer = False
+    image_path = 'D:\\2024\\images_for_cards\\felicita.jpg'
+    correct_answer = True
     create_card(image_path, correct_answer)
 
 
