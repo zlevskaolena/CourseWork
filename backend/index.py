@@ -1,4 +1,4 @@
-from backend.config import User, app, db, bcrypt, mail, Card
+from backend.config import User, app, db, bcrypt, mail, Card, CardResult
 from flask import render_template, redirect, url_for, request, flash, session, jsonify
 from flask_login import login_user, current_user, logout_user
 from backend.forms import LoginForm, RegistrationForm, RequestResetForm, ResetPasswordForm
@@ -84,37 +84,76 @@ def reset_token(token):
         return redirect(url_for('login'))
     return render_template('reset_token.html', title='Reset Password', form=form, register_form=RegistrationForm())
 
-
-@app.route('/cards', methods=['GET'])
+@app.route('/home/cards', methods=['GET', 'POST'])
 def play_game():
     if 'random_cards' not in session:
         session['random_cards'] = get_random_cards()
+        print("DEBUG: Set random cards")
     if 'current_index' not in session:
         session['current_index'] = 0
+        print("DEBUG: Set current index")
 
-    if 'current_index' in session and session['current_index'] >= len(session['random_cards']):
-        session.pop('random_cards', None)
-        session.pop('current_index', None)
-        return jsonify({'message': 'No more cards'}), 200
+    if request.method == 'POST' and request.headers.get('Content-Type') == 'application/json':
+        user_answer = request.json.get('user_answer')
+        print("DEBUG: Received user answer")
 
-    if request.headers.get('Content-Type') == 'application/json':
+        current_index = session['current_index']
+        current_card = session['random_cards'][current_index]
+        correct_answer = current_card['correct_answer']
+
+        if user_answer == correct_answer:
+            session['score'] = session.get('score', 0) + 1
+            print("DEBUG: Score in session:", session['score'])
+
+        session['current_index'] += 1
+        if session['current_index'] >= len(session['random_cards']):
+            score = session.get('score', 0)
+            session.pop('score', None)
+            print("DEBUG: End of game. Final score:", score)
+            if current_user.is_authenticated:
+                result = CardResult(user_id=current_user.id, result="Game Over", score=score)
+                db.session.add(result)
+                db.session.commit()
+            return jsonify({'message': 'Game Over', 'score': score}), 200
+
+        return jsonify({'message': 'Next card'}), 200
+
+    elif request.method == 'GET' and request.headers.get('Content-Type') == 'application/json':
+        if session['current_index'] >= len(session['random_cards']):
+            print("DEBUG: No more cards")
+            return jsonify({'message': 'No more cards'}), 200
+
         current_index = session['current_index']
         current_card = session['random_cards'][current_index]
         session['current_index'] += 1
+        print("DEBUG: Next card")
         return jsonify(current_card)
 
-    return render_template('games/cards_game.html')
+    else:
+        return render_template('games/cards_game.html')
 
-def get_random_cards():
+
+
+@app.route('/home/cards/cards_over', methods=['GET', 'POST'])
+def cards_over():
+    score = session.pop('final_score', None)
+    show_button = current_user.is_authenticated
+    if score is not None:
+        if request.method == 'POST' and current_user.is_authenticated:
+            result = CardResult(user_id=current_user.id, result="Game Over", score=score)
+            db.session.add(result)
+            db.session.commit()
+        return render_template('games/cards_over.html', score=score, show_button=show_button)
+    else:
+        score = request.args.get('score')
+        return render_template('games/cards_over.html', score=score, show_button=show_button)
+
+
+def get_random_cards(limit=10):
     cards = Card.query.all()
     random.shuffle(cards)
-    return [card.to_dict() for card in cards]
+    return [card.to_dict() for card in cards[:limit]]
 
 
-@app.route('/game_over')
-def game_over():
-    score = session.get('score', 0)
-    session.pop('random_cards', None)
-    session.pop('current_card_index', None)
-    session.pop('score', None)
-    return render_template('games/cards_over.html', score=score)
+
+

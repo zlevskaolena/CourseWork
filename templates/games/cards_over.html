@@ -2,32 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Over</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 50px;
-        }
-        h1 {
-            color: #333;
-        }
-        .score {
-            font-size: 24px;
-            margin-top: 20px;
-        }
-        .play-again {
-            margin-top: 30px;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Game Over!</h1>
-    <div class="score">
-        <p>Your final score is: {{ score }}</p>
-    </div>
-    <div class="play-again">
+    <div>
+        <h1>Game Over</h1>
+        <p>Your score: {{ score }}</p>
+        {% if show_button %}
+        <form method="post">
+            <button type="submit">Save Score</button>
+        </form>
+        {% endif %}
         <a href="{{ url_for('play_game') }}">Play Again</a>
     </div>
 </body>

@@ -14,7 +14,7 @@ from flask_session import Session
 
 app = Flask(__name__, static_folder='../static', template_folder='../templates')
 bcrypt = Bcrypt(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///DataBase1.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///DataBase3.db'
 db = SQLAlchemy(app)
 
 MAIL_SERVER = 'smtp.googlemail.com'
@@ -43,6 +43,9 @@ app.config['SESSION_PERMANENT'] = False
 app.config['SESSION_USE_SIGNER'] = True
 app.config['SESSION_KEY_PREFIX'] = 'session:'
 Session(app)
+
+app.config['JSON_AS_ASCII'] = False  # Дозволяє обробку нелатинських символів
+app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False  # Вимикає "pretty print" для JSON-відповідей
 
 
 @login_manager.user_loader
@@ -79,7 +82,6 @@ class Card(db.Model):
     __tablename__ = 'cards'
     id = db.Column(db.Integer, primary_key=True)
     image = db.Column(db.LargeBinary)
-    word = db.Column(db.String)
     correct_answer = db.Column(db.Boolean)
 
     def to_dict(self):
@@ -94,7 +96,6 @@ def card_to_dict(card):
     return {
         'id': card.id,
         'image': 'data:image/jpeg;base64,' + image_to_base64(card.image),
-        'word': card.word,
         'correct_answer': card.correct_answer
     }
 
