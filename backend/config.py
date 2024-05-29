@@ -14,7 +14,7 @@ from flask_session import Session
 
 app = Flask(__name__, static_folder='../static', template_folder='../templates')
 bcrypt = Bcrypt(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///DataBase3.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///DataBase.db'
 db = SQLAlchemy(app)
 
 MAIL_SERVER = 'smtp.googlemail.com'
@@ -104,7 +104,6 @@ class CardResult(db.Model):
     __tablename__ = 'card_results'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    result = db.Column(db.String(50), nullable=False)
     score = db.Column(db.Integer, nullable=False)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 

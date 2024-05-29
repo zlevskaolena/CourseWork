@@ -12,9 +12,11 @@
         {% if show_button %}
         <form method="post">
             <button type="submit">Save Score</button>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         </form>
         {% endif %}
         <a href="{{ url_for('play_game') }}">Play Again</a>
+        <a href="{{ url_for('view_results') }}">View Results</a>
     </div>
 </body>
 </html>

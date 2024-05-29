@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Your Results</h1>
+    {% if results %}
+        <ul>
+            {% for result in results %}
+                <li>Score: {{ result.score }} | Date: {{ result.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>You have no results.</p>
+    {% endif %}
+    <a href="{{ url_for('play_game') }}">Play Again</a>
+    <a href="{{ url_for('register_and_login') }}">Home</a>
+</body>
+</html>

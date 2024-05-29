@@ -116,7 +116,7 @@ def play_game():
             session['final_score'] = score  # Зберігаємо фінальний рахунок у сесії
             print("DEBUG: End of game. Final score:", score)
             if current_user.is_authenticated:
-                result = CardResult(user_id=current_user.id, result="Game Over", score=score)
+                result = CardResult(user_id=current_user.id, score=score)
                 db.session.add(result)
                 db.session.commit()
             return jsonify({'message': 'Game Over', 'score': score}), 200
@@ -143,9 +143,10 @@ def cards_over():
     show_button = current_user.is_authenticated
     if score is not None:
         if request.method == 'POST' and current_user.is_authenticated:
-            result = CardResult(user_id=current_user.id, result="Game Over", score=score)
+            result = CardResult(user_id=current_user.id, score=score)
             db.session.add(result)
             db.session.commit()
+            flash('Результат збережено!', 'success')
         return render_template('games/cards_over.html', score=score, show_button=show_button)
     else:
         score = request.args.get('score')
@@ -158,6 +159,11 @@ def get_random_cards():
     return [card.to_dict() for card in cards]
 
 
+@app.route('/user_results', methods=['GET'])
+def view_results():
+    if not current_user.is_authenticated:
+        flash('Будь ласка, увійдіть, щоб переглянути свої результати.', 'info')
+        return redirect(url_for('register_and_login'))
 
-
-
+    results = CardResult.query.filter_by(user_id=current_user.id).order_by(CardResult.timestamp.desc()).all()
+    return render_template('results.html', results=results)

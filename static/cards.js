@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const trueButton = document.getElementById('true-button');
     const falseButton = document.getElementById('false-button');
     const cardImage = document.getElementById('card-image');
-
     function displayCard(card) {
         if (card.message === 'No more cards') {
             window.location.href = '/home/cards/cards_over';
