@@ -1,20 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Зміна паролю</title>
-</head>
-<body>
 {% extends "Home.html" %}
 
-{% block title %}Reset Password{% endblock %}
+{% block title %} Скидання паролю {% endblock %}
 
 {% block content %}
+    <p>Наразі нема можливості оновлення паролю, через труднощі з поштовим провайдером. Будь ласка, спробуйте пізніше</p>
 <div class="content-section">
     <form method="POST">
         {{ form.hidden_tag() }}
         <fieldset class="form-group">
-            <legend class="border-bottom mb-4">Password Reset</legend>
+            <legend class="border-bottom mb-4">Скинути пароль</legend>
             <div class="form-group">
                 {{ form.email.label(class="form-control-label") }}
                 {{ form.email(class="form-control form-control-lg") }}
@@ -29,6 +23,3 @@
     </form>
 </div>
 {% endblock %}
-
-</body>
-</html>

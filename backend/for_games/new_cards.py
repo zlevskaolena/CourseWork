@@ -16,8 +16,8 @@ def create_card(image_path, correct_answer):
 
 
 if __name__ == "__main__":
-    image_path = 'D:\\2024\\images_for_cards\\no_vestitto.jpg'
-    correct_answer = False
+    image_path = 'D:\\2024\\images_for_cards\\liberta.jpg'
+    correct_answer = True
     create_card(image_path, correct_answer)
 
 

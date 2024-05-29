@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Cards Game</title>
+    <title>Карточки</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script>
         const csrf_token = "{{ csrf_token() }}";
@@ -10,10 +10,10 @@
 </head>
 <body>
     <div>
-        <img id="card-image" src="" alt="Card Image">
+        <img id="card-image" src="" alt="Картка">
         <p id="card-word"></p>
-        <button id="true-button">True</button>
-        <button id="false-button">False</button>
+        <button id="true-button">Правда</button>
+        <button id="false-button">Брехня</button>
     </div>
     <script src="{{ url_for('static', filename='cards.js') }}"></script>
 </body>

@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRFToken': csrf_token // Додаємо CSRF-токен до заголовків
+                'X-CSRFToken': csrf_token
             },
             body: JSON.stringify({ user_answer: answer })
         })
@@ -27,7 +27,6 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(data => {
             console.log(data);
-            // Після надсилання відповіді отримуємо нову картку
             fetchNextCard();
         })
         .catch(error => console.error('Error:', error));
@@ -37,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch('/home/cards', {
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRFToken': csrf_token // Додаємо CSRF-токен до заголовків
+                'X-CSRFToken': csrf_token
             }
         })
         .then(response => {
@@ -53,6 +52,5 @@ document.addEventListener('DOMContentLoaded', function() {
     trueButton.addEventListener('click', () => sendUserAnswer(true));
     falseButton.addEventListener('click', () => sendUserAnswer(false));
 
-    // Перший запит для отримання початкової картки
     fetchNextCard();
 });

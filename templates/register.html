@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Реєстрація</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Реєстрація</h1>
+    <form method="POST" action="{{ url_for('register') }}">
+        {{ form.hidden_tag() }}
+        {{ form.username(placeholder="Ім'я") }}
+        {% for error in form.username.errors %}
+            <span style="color: red;">{{ error }}</span>
+        {% endfor %}
+
+        {{ form.email(placeholder="Email") }}
+        {% for error in form.email.errors %}
+            <span style="color: red;">{{ error }}</span>
+        {% endfor %}
+
+        {{ form.password(placeholder="Пароль") }}
+        {% for error in form.password.errors %}
+            <span style="color: red;">{{ error }}</span>
+        {% endfor %}
+
+        {{ form.confirm_password(placeholder="Підтвердіть пароль") }}
+        {% for error in form.confirm_password.errors %}
+            <span style="color: red;">{{ error }}</span>
+        {% endfor %}
+
+        {{ form.submit() }}
+    </form>
+    <p>Вже маєте акаунт? <a href="{{ url_for('login') }}">Увійти</a></p>
+</body>
+</html>

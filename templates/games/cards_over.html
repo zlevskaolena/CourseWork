@@ -2,21 +2,24 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Game Over</title>
+    <title>Кінець гри</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <div>
-        <h1>Game Over</h1>
-        <p>Your score: {{ score }}</p>
+        <h1>Гра закінчилась</h1>
+            {% if score is string %}
+                <p>Результат не отримано</p>
+            {% else %}
+                <p>Ваш результат: {{ score }}/20</p>
+            {% endif %}
         {% if show_button %}
         <form method="post">
-            <button type="submit">Save Score</button>
+            <button type="submit">Зберегти результат</button>
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         </form>
         {% endif %}
-        <a href="{{ url_for('play_game') }}">Play Again</a>
-        <a href="{{ url_for('view_results') }}">View Results</a>
+        <a href="{{ url_for('view_results') }}">Всі результати</a>
     </div>
 </body>
 </html>

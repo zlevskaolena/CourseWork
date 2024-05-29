@@ -21,12 +21,12 @@ class LoginForm(FlaskForm):
 
 class RequestResetForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
-    submit = SubmitField('Request Password Reset')
+    submit = SubmitField('Cкинути пароль')
 
     def validate_email(self, email):
         user = User.query.filter_by(email=email.data).first()
         if user is None:
-            raise ValidationError('There is no account with that email. You must register first.')
+            raise ValidationError('Облікового запису з такою адресою не існує. Зареєструйтеся, будь ласка')
 
 
 class ResetPasswordForm(FlaskForm):

@@ -44,8 +44,8 @@ app.config['SESSION_USE_SIGNER'] = True
 app.config['SESSION_KEY_PREFIX'] = 'session:'
 Session(app)
 
-app.config['JSON_AS_ASCII'] = False  # Дозволяє обробку нелатинських символів
-app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False  # Вимикає "pretty print" для JSON-відповідей
+app.config['JSON_AS_ASCII'] = False
+app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
 
 
 @login_manager.user_loader
@@ -110,4 +110,3 @@ class CardResult(db.Model):
 
 with app.app_context():
     db.create_all()
-

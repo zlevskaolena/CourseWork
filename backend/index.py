@@ -6,12 +6,15 @@ from flask_mail import Message
 import random
 
 
-@app.route('/', methods=['GET', 'POST'])
-@app.route('/home', methods=['GET', 'POST'])
-def register_and_login():
-    register_form = RegistrationForm()
-    login_form = LoginForm()
+@app.route('/')
+@app.route('/home')
+def home():
+    return render_template('home.html')
 
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    register_form = RegistrationForm()
     if register_form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(register_form.password.data).decode('utf-8')
         user = User(username=register_form.username.data, email=register_form.email.data, password=hashed_password)
@@ -19,38 +22,48 @@ def register_and_login():
         try:
             db.session.commit()
             login_user(user)
-            return redirect(url_for('register_and_login'))
-
+            return redirect(url_for('home'))
         except Exception as e:
             db.session.rollback()
             flash("Виникла помилка при реєстрації користувача. Можливо, електронна пошта вже використовується.", 'danger')
+    return render_template('register.html', form=register_form)
 
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    login_form = LoginForm()
     if login_form.validate_on_submit():
         user = User.query.filter_by(email=login_form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, login_form.password.data):
             login_user(user, remember=login_form.remember.data)
-            return redirect(url_for('register_and_login'))
+            return redirect(url_for('home'))
         else:
             flash("Не вдалося увійти. Будь ласка, перевірте електронну пошту та пароль.", 'danger')
+    return render_template('login.html', form=login_form)
 
-    if request.method == "POST" and request.form.get('post_header') == 'log out':
-        logout_user()
-        return redirect(url_for('register_and_login'))
 
-    return render_template('Home.html', login_form=login_form, register_form=register_form)
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('home'))
 
 
 def send_reset_email(user):
-    token = user.get_reset_token()
-    msg = Message('Password Reset Request',
-                  sender='zalevskaalena25@gmail.com',
-                  recipients=[user.email])
-    msg.body = f'''To reset your password, visit the following link:
-{url_for('reset_token', token=token, _external=True)}
-
-If you did not make this request then simply ignore this email and no changes will be made.
-'''
-    mail.send(msg)
+    try:
+        token = user.get_reset_token()
+        msg = Message('LOCUS. Оновлення паролю.',
+                      sender='zalevskaalena25@gmail.com',
+                      recipients=[user.email])
+        msg.body = f'''Для того, щоб оновити пароль, перейдіть за посиланням:
+        {url_for('reset_token', token=token, _external=True)}
+        Якщо це НЕ Ви намагаєтесь оновити пароль - проігноруйте це повідомлення.
+        '''
+        mail.send(msg)
+        flash('На вашу електронну пошту відправлено лист з інструкціями для скидання паролю.', 'info')
+        return redirect(url_for('login'))
+    except Exception as e:
+        flash('Під час відправлення листа сталася помилка. Будь ласка, спробуйте ще раз пізніше.', 'danger')
+        return redirect(url_for('reset_request'))
 
 
 @app.route('/reset_password', methods=['GET', 'POST'])
@@ -62,9 +75,9 @@ def reset_request():
         user = User.query.filter_by(email=form.email.data).first()
         if user:
             send_reset_email(user)
-        flash('An email has been sent with instructions to reset your password.', 'info')
-        return redirect(url_for('login'))
-    return render_template('reset_request.html', title='Reset Password', form=form, register_form=RegistrationForm(), login_form=LoginForm())
+        else:
+            flash('Користувача з цією електронною адресою не існує.', 'danger')
+    return render_template('reset_request.html', title='Скидання паролю', form=form)
 
 
 @app.route('/reset_password/<token>', methods=['GET', 'POST'])
@@ -73,7 +86,7 @@ def reset_token(token):
         return redirect(url_for('home'))
     user = User.verify_reset_token(token)
     if not user:
-        flash('That is an invalid or expired token', 'warning')
+        flash('Недійсний або прострочений токен', 'warning')
         return redirect(url_for('reset_request'))
     form = ResetPasswordForm()
     if form.validate_on_submit():
@@ -81,26 +94,23 @@ def reset_token(token):
         user.password = hashed_password
         db.session.commit()
 
-        flash('Your password has been updated! You are now able to log in', 'success')
+        flash('Ваш пароль було оновлено! Тепер ви можете увійти.', 'success')
         return redirect(url_for('login'))
-    return render_template('reset_token.html', title='Reset Password', form=form, register_form=RegistrationForm())
+    return render_template('reset_token.html', title='Скидання паролю', form=form)
+
 
 @app.route('/home/cards', methods=['GET', 'POST'])
 def play_game():
     if 'random_cards' not in session:
         session['random_cards'] = get_random_cards()
-        print("DEBUG: Set random cards")
     if 'current_index' not in session:
         session['current_index'] = 0
-        print("DEBUG: Set current index")
 
     if request.method == 'POST' and request.headers.get('Content-Type') == 'application/json':
         user_answer = request.json.get('user_answer')
-        print("DEBUG: Received user answer")
 
         current_index = session['current_index']
         if current_index >= len(session['random_cards']):
-            print("DEBUG: No more cards")
             return jsonify({'message': 'No more cards'}), 200
 
         current_card = session['random_cards'][current_index]
@@ -108,13 +118,13 @@ def play_game():
 
         if user_answer == correct_answer:
             session['score'] = session.get('score', 0) + 1
-            print("DEBUG: Score in session:", session['score'])
+            print("ПЕРЕВІРКА: Результат в сесії:", session['score'])
 
         session['current_index'] += 1
         if session['current_index'] >= len(session['random_cards']):
             score = session.get('score', 0)
-            session['final_score'] = score  # Зберігаємо фінальний рахунок у сесії
-            print("DEBUG: End of game. Final score:", score)
+            session['final_score'] = score
+            print("ПЕРЕВІРКА: Кінцевий результат:", score)
             if current_user.is_authenticated:
                 result = CardResult(user_id=current_user.id, score=score)
                 db.session.add(result)
@@ -125,14 +135,11 @@ def play_game():
 
     elif request.method == 'GET' and request.headers.get('Content-Type') == 'application/json':
         if session['current_index'] >= len(session['random_cards']):
-            print("DEBUG: No more cards")
             return jsonify({'message': 'No more cards'}), 200
 
         current_index = session['current_index']
         current_card = session['random_cards'][current_index]
-        print("DEBUG: Next card")
         return jsonify(current_card)
-
     else:
         return render_template('games/cards_game.html')
 
@@ -163,7 +170,7 @@ def get_random_cards():
 def view_results():
     if not current_user.is_authenticated:
         flash('Будь ласка, увійдіть, щоб переглянути свої результати.', 'info')
-        return redirect(url_for('register_and_login'))
+        return redirect(url_for('login'))
 
     results = CardResult.query.filter_by(user_id=current_user.id).order_by(CardResult.timestamp.desc()).all()
-    return render_template('results.html', results=results)
+    return render_template('games/results.html', results=results)
