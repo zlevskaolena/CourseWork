@@ -1,21 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "Home.html" %}
+
+{% block title %}Результати{% endblock %}
+
+{% block content %}
 <head>
     <meta charset="UTF-8">
     <title>Результати</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Ваші результати:</h1>
-    {% if results %}
-        <ul>
-            {% for result in results %}
-                <li>Результат: {{ result.score }}/20 | Дата і час: {{ result.timestamp.strftime('%d-%m-%Y %H:%M:%S') }}</li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>Наразі у вас немає результатів.</p>
-    {% endif %}
-    <a href="{{ url_for('login') }}">Увійти</a>
+    <div class="results-container">
+        <h1>Ваші результати:</h1>
+        {% if results %}
+            <ul>
+                {% for result in results %}
+                    <li>Результат: {{ result.score }}/20 | Дата і час: {{ result.timestamp.strftime('%d-%m-%Y %H:%M:%S') }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Наразі у вас немає результатів.</p>
+        {% endif %}
+    </div>
 </body>
-</html>
+{% endblock %}
+

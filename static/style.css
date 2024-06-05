@@ -1,71 +1,278 @@
-/* Загальний стиль для тіла сторінки */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Playfair Display', Arial, sans-serif;
     margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
+    padding: 100px 50px;
+    background: #220C4D;
+    color: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-/* Стиль для заголовків */
+header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 50px 15px;
+    background-image: url('header.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    flex: 1;
+    max-width: 2000px;
+}
+
+
+.welcome-message {
+    margin: 20px 0;
+    font-size: 24px;
+}
+
+header .auth {
+    display: flex;
+    gap: 20px;
+    margin-left: 50%;
+    transform: translateX(-30%);
+}
+
+
+header .auth a {
+    color: #000000;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 20px 40px;
+    border-radius: 10px;
+    font-size: 20px;
+}
+
+header .auth a:hover {
+    text-decoration: underline;
+}
+
+main {
+    flex: 1;
+    width: 100%;
+    max-width: 1200px;
+    padding: 80px 20px 20px;
+    box-sizing: border-box;
+}
+
 h1, h2, h3, h4, h5, h6 {
     margin: 10px 0;
     padding: 0;
-    color: #333;
-}
-
-/* Стилізація карточок */
-#cards-container {
-    list-style-type: none;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-#cards-container li {
-    display: inline-block;
-    margin: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
-    width: 200px;
+    color: #FFFFFF;
     text-align: center;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-#cards-container li img {
-    max-width: 100%;
-    border-radius: 5px;
-}
-
-#cards-container li p {
-    margin: 10px 0 0;
-    font-size: 16px;
-    color: #555;
-}
-
-/* Стилізація кнопок */
 #true-button,
 #false-button {
     display: inline-block;
-    padding: 10px 20px;
+    padding: 20px 30px;
     margin: 10px;
     border: none;
     border-radius: 5px;
-    background-color: #007bff;
+    background-color: #320F79;
     color: #fff;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 25px;
+
 }
 
 #true-button:hover,
 #false-button:hover {
-    background-color: #0056b3;
+    background-color: #320F79;
 }
 
-/* Додатковий стиль для кнопок при активному стані */
 #true-button:active,
 #false-button:active {
-    background-color: #003f7f;
+    background-color: #220C4D;
+}
+
+.reset-password-container {
+    text-align: center;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.reset-password-form {
+    margin-top: 20px;
+}
+
+.login-container {
+    text-align: center;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.login-form {
+    margin-top: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-control {
+    width: 100%;
+    font-size: 16px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: #fff;
+}
+
+.btn-primary {
+    background-color: #320F79;
+}
+
+.btn-primary:hover {
+    background-color: #220C4D;
+}
+
+.register-container {
+    text-align: center;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.register-form {
+    margin-top: 20px;
+}
+
+.error {
+    color: red;
+}
+
+.main-content {
+    text-align: center;
+    margin: 0 auto;
+    max-width: 800px;
+    padding: 20px;
+}
+
+.main-content p {
+    font-size: 1.2em;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.card-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 100px);
+    margin-top: 30px;
+}
+
+.card-image {
+    max-width: 900px;
+    margin-right: 20px;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    margin-right: 20px;
+    padding: 20px 40px;
+    font-size: 18px;
+
+}
+
+.card-button {
+    margin-bottom: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+.card-word {
+    margin-top: 20px;
+    font-size: 20px;
+    text-align: center;
+}
+
+.results-container {
+    text-align: center;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.results-container h1 {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.results-container ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.results-container li {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.end-game-container {
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.end-game-container h1 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+}
+
+.end-game-container p {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+}
+
+.save-result-form {
+    margin-bottom: 20px;
+}
+
+.btn-save {
+    padding: 15px 30px;
+    font-size: 1.2em;
+    background-color: #320F79;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-save:hover {
+    background-color: #220C4D;
+}
+
+.view-results-link {
+    display: inline-block;
+    margin-top: 20px;
+    font-size: 1.2em;
+    color: #fff;
+    text-decoration: none;
+    background-color: #320F79;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+.view-results-link:hover {
+    background-color: #220C4D;
 }

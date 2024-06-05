@@ -1,5 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "Home.html" %}
+
+{% block title %}Авторизація{% endblock %}
+
+{% block content %}
 <head>
     <meta charset="UTF-8">
     <title>Карточки</title>
@@ -9,12 +12,15 @@
     </script>
 </head>
 <body>
-    <div>
-        <img id="card-image" src="" alt="Картка">
-        <p id="card-word"></p>
-        <button id="true-button">Правда</button>
-        <button id="false-button">Брехня</button>
+    <div class="card-container">
+        <img id="card-image" src="" alt="Картка" class="card-image">
+        <div class="button-container">
+            <button id="true-button" class="card-button">Правда</button>
+            <button id="false-button" class="card-button">Брехня</button>
+        </div>
+        <p id="card-word" class="card-word"></p>
     </div>
     <script src="{{ url_for('static', filename='cards.js') }}"></script>
 </body>
-</html>
+{% endblock %}
+

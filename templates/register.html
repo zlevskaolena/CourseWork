@@ -1,36 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Реєстрація</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <h1>Реєстрація</h1>
-    <form method="POST" action="{{ url_for('register') }}">
-        {{ form.hidden_tag() }}
-        {{ form.username(placeholder="Ім'я") }}
-        {% for error in form.username.errors %}
-            <span style="color: red;">{{ error }}</span>
-        {% endfor %}
+{% extends "Home.html" %}
 
-        {{ form.email(placeholder="Email") }}
-        {% for error in form.email.errors %}
-            <span style="color: red;">{{ error }}</span>
-        {% endfor %}
+{% block title %}Реєстрація{% endblock %}
 
-        {{ form.password(placeholder="Пароль") }}
-        {% for error in form.password.errors %}
-            <span style="color: red;">{{ error }}</span>
-        {% endfor %}
+{% block content %}
+    <div class="register-container">
+        <h1>Реєстрація</h1>
+        <form class="register-form" method="POST" action="{{ url_for('register') }}">
+            {{ form.hidden_tag() }}
 
-        {{ form.confirm_password(placeholder="Підтвердіть пароль") }}
-        {% for error in form.confirm_password.errors %}
-            <span style="color: red;">{{ error }}</span>
-        {% endfor %}
+            <div class="form-group">
+                {{ form.username(class="form-control", placeholder="Ім'я") }}
+                {% for error in form.username.errors %}
+                    <span class="error">{{ error }}</span>
+                {% endfor %}
+            </div>
 
-        {{ form.submit() }}
-    </form>
-    <p>Вже маєте акаунт? <a href="{{ url_for('login') }}">Увійти</a></p>
-</body>
-</html>
+            <div class="form-group">
+                {{ form.email(class="form-control", placeholder="Email") }}
+                {% for error in form.email.errors %}
+                    <span class="error">{{ error }}</span>
+                {% endfor %}
+            </div>
+
+            <div class="form-group">
+                {{ form.password(class="form-control", placeholder="Пароль") }}
+                {% for error in form.password.errors %}
+                    <span class="error">{{ error }}</span>
+                {% endfor %}
+            </div>
+
+            <div class="form-group">
+                {{ form.confirm_password(class="form-control", placeholder="Підтвердіть пароль") }}
+                {% for error in form.confirm_password.errors %}
+                    <span class="error">{{ error }}</span>
+                {% endfor %}
+            </div>
+
+            <div class="form-group">
+                {{ form.submit(class="btn btn-primary btn-lg btn-block") }}
+            </div>
+        </form>
+        <p>Вже маєте акаунт? <a href="{{ url_for('login') }}">Увійти</a></p>
+    </div>
+{% endblock %}
+

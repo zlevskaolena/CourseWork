@@ -1,25 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "Home.html" %}
+
+{% block title %}Кінець гри{% endblock %}
+
+{% block content %}
 <head>
     <meta charset="UTF-8">
     <title>Кінець гри</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div>
+    <div class="end-game-container">
         <h1>Гра закінчилась</h1>
-            {% if score is string %}
-                <p>Результат не отримано</p>
-            {% else %}
-                <p>Ваш результат: {{ score }}/20</p>
-            {% endif %}
-        {% if show_button %}
-        <form method="post">
-            <button type="submit">Зберегти результат</button>
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        </form>
+        {% if score is string %}
+            <p>Результат не отримано</p>
+        {% else %}
+            <p>Ваш результат: {{ score }}/20</p>
         {% endif %}
-        <a href="{{ url_for('view_results') }}">Всі результати</a>
+        {% if show_button %}
+            <form method="post" class="save-result-form">
+                <button type="submit" class="btn-save">Зберегти результат</button>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            </form>
+        {% endif %}
+        <a href="{{ url_for('view_results') }}" class="view-results-link">Всі результати</a>
     </div>
 </body>
-</html>
+{% endblock %}
+
